@@ -44,4 +44,4 @@ def arr_rounder(splits):
     result = []
     for split in splits:
         result.append(np.average(split, axis=(0, 1)))
-    return result
+    return np.array(result).transpose()
