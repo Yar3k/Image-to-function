@@ -5,7 +5,11 @@ import numpy as np
 def image_reader(path):
     return [np.array(cv2.imread('test.png'))]
 
-#Starts splitting horizontally
+'''
+Starts splitting horizontally
+Returns in order: [1, 3]
+                  [2, 4]
+'''
 def image_hsplit(img_arr, splitter):
     new_arr = []
     if splitter == 1:
@@ -18,7 +22,11 @@ def image_hsplit(img_arr, splitter):
     
     return image_vsplit(new_arr, splitter/2)
 
-#Starts splitting vertically
+'''
+Starts splitting vertically
+Returns in order: [1, 2]
+                  [3, 4]
+'''
 def image_vsplit(img_arr, splitter):
     new_arr = []
     if splitter == 1:
