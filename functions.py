@@ -3,7 +3,7 @@ import numpy as np
 
 #Returns [H x W x RGB]
 def image_reader(path):
-    return [np.array(cv2.imread('test.png'))]
+    return [np.array(cv2.imread(path))]
 
 '''
 Starts splitting horizontally
