@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import filedialog as fd
+import numpy as np
 
 
 fileName1 = ""
@@ -23,26 +24,34 @@ def drawByFileNames():
     img2 = functions.image_reader(fileName2)
     rez = functions.image_hsplit(img, 16)
     rez2 = functions.image_hsplit(img2, 16)
-    # idx = 0
-    # for r in rez:
-    #     cv2.imwrite(str(idx) + "./images/split.png",r)
-    #     idx+=1
+    idx = 0
+    for r in rez:
+        cv2.imwrite(str(idx) + "./images/split.png",r)
+        idx+=1
 
 
     arr = functions.arr_rounder(rez)
     arr2 = functions.arr_rounder(rez2)
 
-    dataRed = {'X': list(range(1, len(arr[0])+1)),
+    redMaxDiffArr = list(map(lambda x, y: abs(x - y), arr[0], arr2[0]))
+    redMaxDiffLabel = 'Didz. Atstumas: ' + str(np.argmax(redMaxDiffArr)+1) + ' skilty, ' + str(round(np.max(redMaxDiffArr)*100)/100) 
+    dataRed = {redMaxDiffLabel: list(range(1, len(arr[0])+1)),
             'pav1': arr[0],
             'pav2': arr2[0]
             }  
     dfRed = pd.DataFrame(dataRed)
-    dataGreen = {'X': list(range(1, len(arr[1])+1)),
+
+    greenMaxDiffArr = list(map(lambda x, y: abs(x - y), arr[1], arr2[1]))
+    greenMaxDiffLabel = 'Didz. Atstumas: ' + str(np.argmax(greenMaxDiffArr)+1) + ' skilty, ' + str(round(np.max(greenMaxDiffArr)*100)/100) 
+    dataGreen = {greenMaxDiffLabel: list(range(1, len(arr[1])+1)),
             'pav1': arr[1],
             'pav2': arr2[1]
             }  
     dfGreen = pd.DataFrame(dataGreen)
-    dataBlue = {'X': list(range(1, len(arr[2])+1)),
+
+    blueMaxDiffArr = list(map(lambda x, y: abs(x - y), arr[2], arr2[2]))
+    blueMaxDiffLabel = 'Didz. Atstumas: ' + str(np.argmax(blueMaxDiffArr)+1) + ' skilty, ' + str(round(np.max(blueMaxDiffArr)*100)/100) 
+    dataBlue = {blueMaxDiffLabel: list(range(1, len(arr[2])+1)),
             'pav1': arr[2],
             'pav2': arr2[2]
             }  
@@ -56,24 +65,24 @@ def drawByFileNames():
     axRed = figureRed.add_subplot(111)
     lineRed = FigureCanvasTkAgg(figureRed, root)
     lineRed.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-    dfRed = dfRed[['X', 'pav1', 'pav2']].groupby('X').sum()
-    dfRed.plot(kind='line', legend=True, ax=axRed, color=['r', 'y'], marker='o', fontsize=10)
+    dfRed = dfRed[[redMaxDiffLabel, 'pav1', 'pav2']].groupby(redMaxDiffLabel).sum()
+    dfRed.plot(kind='line', legend=True, ax=axRed, color=['r', 'y'], fontsize=10)
     axRed.set_title('Raudona')
     
     figureGreen = plt.Figure(figsize=(5, 4), dpi=100)
     axGreen = figureGreen.add_subplot(111)
     lineBlue = FigureCanvasTkAgg(figureGreen, root)
     lineBlue.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-    dfGreen = dfGreen[['X', 'pav1', 'pav2']].groupby('X').sum()
-    dfGreen.plot(kind='line', legend=True, ax=axGreen, color=['g', 'y'], marker='o', fontsize=10)
+    dfGreen = dfGreen[[greenMaxDiffLabel, 'pav1', 'pav2']].groupby(greenMaxDiffLabel).sum()
+    dfGreen.plot(kind='line', legend=True, ax=axGreen, color=['g', 'y'], fontsize=10)
     axGreen.set_title('Žalia')
 
     figureBlue = plt.Figure(figsize=(5, 4), dpi=100)
     axBlue = figureBlue.add_subplot(111)
     lineBlue = FigureCanvasTkAgg(figureBlue, root)
     lineBlue.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-    dfBlue = dfBlue[['X', 'pav1', 'pav2']].groupby('X').sum()
-    dfBlue.plot(kind='line', legend=True, ax=axBlue, color=['b', 'y'], marker='o', fontsize=10)
+    dfBlue = dfBlue[[blueMaxDiffLabel, 'pav1', 'pav2']].groupby(blueMaxDiffLabel).sum()
+    dfBlue.plot(kind='line', legend=True, ax=axBlue, color=['b', 'y'], fontsize=10)
     axBlue.set_title('Mėlyna')
 
 
