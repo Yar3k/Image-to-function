@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import filedialog as fd
 import numpy as np
+import sys
 
 
 fileName1 = ""
@@ -13,17 +14,15 @@ fileName2 = ""
 fileName1Var = ""
 fileName2Var = ""
 
-def drawByFileNames():
+def drawByFileNames(splitter):
     global fileName1
     global fileName2
     if fileName1 == "" or fileName2 == "":
-        print('suk')
         return
-    print('nuu')
     img = functions.image_reader(fileName1)
     img2 = functions.image_reader(fileName2)
-    rez = functions.image_hsplit(img, 16)
-    rez2 = functions.image_hsplit(img2, 16)
+    rez = functions.image_hsplit(img, splitter)
+    rez2 = functions.image_hsplit(img2, splitter)
     idx = 0
     for r in rez:
         cv2.imwrite(str(idx) + "./images/split.png",r)
@@ -103,7 +102,7 @@ def buttonCallback2():
     global fileName2Var
     fileName2Var.set(fileName2)
 
-def main():
+def main(argv):
     root = tk.Tk()
     global fileName1Var
     global fileName2Var
@@ -121,7 +120,7 @@ def main():
     btnUpload1.place(x=20, y=20)
     btnUpload2 = tk.Button(root, text = 'Open image nr 2!', command = buttonCallback2)
     btnUpload2.place(x=20, y=60)
-    btn3 = tk.Button(root, text = 'Show charts!', command = drawByFileNames)
+    btn3 = tk.Button(root, text = 'Show charts!', command = lambda: drawByFileNames(argv))
     btn3.place(x=20, y=100)
     
 
@@ -132,4 +131,4 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    main()
+    main(int(sys.argv[1]))

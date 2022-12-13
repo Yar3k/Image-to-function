@@ -12,7 +12,7 @@ Returns in order: [1, 3]
 '''
 def image_hsplit(img_arr, splitter):
     new_arr = []
-    if splitter == 1:
+    if splitter <= 1:
         return img_arr
 
     for part in img_arr:
